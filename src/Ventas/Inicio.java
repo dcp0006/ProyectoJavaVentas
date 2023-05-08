@@ -29,6 +29,7 @@ public class Inicio {
 	private static JTextField usuario;
 	private static JPasswordField contraseña;
 	static int n = 0;
+	static String usuarioFinal="default";
 
 	/**
 	 * Launch the application.
@@ -120,6 +121,7 @@ public class Inicio {
 							Interface a = new Interface();
 							a.frame.setVisible(true);
 							frame.setVisible(false);
+							usuarioFinal=usuario.getText();
 						} else {
 							Error.setVisible(true);
 							System.out.println("fallo");
@@ -135,6 +137,7 @@ public class Inicio {
 					Interface a = new Interface();
 					a.frame.setVisible(true);
 					frame.setVisible(false);
+					usuarioFinal=usuario.getText();
 				} else {
 					Error.setVisible(true);
 				}
@@ -152,6 +155,7 @@ public class Inicio {
 					if (Conexion.loginUsuario(usuario.getText(), contraseña.getText())) {
 						JOptionPane.showMessageDialog(null,
 								"Este usuario ya existe,introduzca otros datos o inicie sesion");
+						
 					} else {
 						Conexion.registroUsuario(usuario.getText(), contraseña.getText());
 						JOptionPane.showMessageDialog(null, "Usuario creado");
