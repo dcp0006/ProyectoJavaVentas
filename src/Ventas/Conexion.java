@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 public class Conexion {
 	
 public static void añadirProducto(int cantidad,String producto,double precio) throws SQLException {
+
 	try {
 		 // Cargar el controlador JDBC
        Class.forName("com.mysql.cj.jdbc.Driver");
@@ -31,6 +32,29 @@ public static void añadirProducto(int cantidad,String producto,double precio) t
 	} catch (Exception e) {
 		JOptionPane.showMessageDialog(null,"Producto ya creado");
 		Interface.modelo.removeRow(Interface.modelo.getRowCount()-1);
+		
+	}
+}
+public static void añadirVenta(String producto,int cantidad,double precio) throws SQLException {
+
+	try {
+		 // Cargar el controlador JDBC
+       Class.forName("com.mysql.cj.jdbc.Driver");
+
+       // Establecer la conexión a la base de datos
+       String url = "jdbc:mysql://localhost:3306/prueba";
+       String user = "root";
+       String contraseña = "";
+       Connection conexion = DriverManager.getConnection(url, user, contraseña);
+       
+       //mete los valores en base de datos
+	String consulta="insert into ventas values('"+producto+"','"+cantidad+"','"+precio+"')";
+	Statement statement=conexion.createStatement();
+	statement.executeUpdate(consulta);
+	
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null,"Venta ya añadidad");
+		Interface.modeloVentas.removeRow(Interface.modelo.getRowCount()-1);
 		
 	}
 }
@@ -83,6 +107,34 @@ public static void cargarTablaInven() throws SQLException {
 		
 	}
 }
+public static void cargarTablaVentas() throws SQLException {
+	try {
+		 // Cargar el controlador JDBC
+       Class.forName("com.mysql.cj.jdbc.Driver");
+
+       // Establecer la conexión a la base de datos
+       String url = "jdbc:mysql://localhost:3306/prueba";
+       String user = "root";
+       String contraseña = "";
+       Connection conexion = DriverManager.getConnection(url, user, contraseña);
+       
+       //mete los valores en base de datos
+	String consulta="select * from ventas";
+	Statement statement=conexion.createStatement();
+	
+	ResultSet resultText=statement.executeQuery(consulta);
+	while(resultText.next()) {
+		int cantidad=resultText.getInt("cantidad");
+		String producto=resultText.getString("producto");
+		double precio=resultText.getDouble("precio");
+		Interface.modeloVentas.addRow(new Object[] {producto,precio});
+	}
+	} catch (Exception e) {
+		System.out.println("Error");
+		
+	}
+}
+
 public static void actualizarProducto(int cantidad,String producto,double precio) throws SQLException {
 	try {
 		 // Cargar el controlador JDBC

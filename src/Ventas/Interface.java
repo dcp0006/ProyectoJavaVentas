@@ -50,11 +50,12 @@ public class Interface {
 	private final JPanel Proveedores = new JPanel();
 	private final JPanel Configuracion = new JPanel();
 	static DefaultTableModel modelo = new DefaultTableModel();;
+	static DefaultTableModel modeloVentas = new DefaultTableModel();;
 	private JTable table=new JTable(modelo);
+	private JTable table_1 = new JTable(modeloVentas);
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-	private JTable table_1;
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTable table_2;
@@ -163,6 +164,7 @@ public class Interface {
 		}
 		try {
 			Conexion.cargarTablaInven();
+			Conexion.cargarTablaVentas();
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -341,12 +343,14 @@ public class Interface {
 		tabbedPane.addTab("Ventas", null, Ventas, null);
 		Ventas.setLayout(null);
 		
-		table_1 = new JTable((TableModel) null);
+	
 		table_1.setFillsViewportHeight(true);
 		table_1.setCellSelectionEnabled(true);
 		table_1.setBorder(new MatteBorder(0, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		table_1.setBounds(56, 85, 419, 575);
 		Ventas.add(table_1);
+		modeloVentas.addColumn("producto");
+		modeloVentas.addColumn("Precio");
 		
 		JLabel lblNewLabel_2 = new JLabel("Vende:");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -365,7 +369,7 @@ public class Interface {
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Cant:");
 		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_2_1.setBounds(597, 152, 150, 50);
+		lblNewLabel_2_1.setBounds(597, 152, 54, 50);
 		Ventas.add(lblNewLabel_2_1);
 		
 		textField_4 = new JTextField();
@@ -374,11 +378,28 @@ public class Interface {
 		textField_4.setColumns(10);
 		
 		JButton btnNewButton_2 = new JButton("Vender");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String producto=textField_3.getText();
+				int cantidad=Integer.valueOf(textField_4.getText());
+				double precio=Double.valueOf(textField_5.getText());
+				modeloVentas.addRow(new Object[] {producto, precio});
+				try {
+					Conexion.añadirVenta(producto, cantidad, precio);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnNewButton_2.setBackground(new Color(222, 184, 135));
 		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNewButton_2.setBounds(597, 268, 187, 50);
 		Ventas.add(btnNewButton_2);
 		
 		JButton btnNewButton_2_1 = new JButton("Info Ventas");
+		btnNewButton_2_1.setBackground(new Color(222, 184, 135));
 		btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNewButton_2_1.setBounds(597, 374, 187, 50);
 		Ventas.add(btnNewButton_2_1);
@@ -516,7 +537,7 @@ public class Interface {
 		frame.setTitle("BeeKeepIt");
 		
 		
-		//tabbedPane.setUI(new CustomTabbedPaneUI());			//Ecplise no lo detecta bien
+		tabbedPane.setUI(new CustomTabbedPaneUI());			//Ecplise no lo detecta bien
 	}
 	public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 
